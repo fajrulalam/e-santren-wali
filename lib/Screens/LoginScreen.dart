@@ -2,6 +2,9 @@ import 'package:esantrenwali_v1/Screens/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../Services/Authentication.dart';
+import 'WidgetTree.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -11,6 +14,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool tersembunyi = true;
+  bool errorIsVisible = false;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: [
                           TextField(
+                            controller: emailController,
                             decoration: InputDecoration(
                               //add rounded border
                               border: OutlineInputBorder(
@@ -58,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           SizedBox(height: 20),
                           TextField(
+                            controller: passwordController,
                             obscureText: tersembunyi,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -76,10 +84,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       : Icon(Icons.visibility_outlined)),
                             ),
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 10),
+                          Visibility(
+                              visible: errorIsVisible, child: _errorMessage()),
+                          SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, HomePage.id);
+                              signInWithEmailAndPassword();
+                              // Navigator.pushNamed(context, HomePage.id);
                             },
                             child: Text('Masuk'),
                           ),
@@ -109,5 +121,35 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             )));
+  }
+
+  Future<void> signInWithEmailAndPassword() async {
+    try {
+      await Auth().signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text);
+      Navigator.pushReplacementNamed(context, WidgetTree.id);
+    } catch (e) {
+      setState(() {
+        errorIsVisible = true;
+      });
+      //await two seconds and then make it false
+      Future.delayed(Duration(seconds: 2), () {
+        setState(() {
+          errorIsVisible = false;
+        });
+      });
+    }
+  }
+
+  Widget _errorMessage() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      alignment: Alignment.center,
+      child: Text(
+        'Email atau Password salah. Silakan coba lagi.',
+        style: TextStyle(color: Colors.redAccent, fontSize: 14),
+      ),
+    );
   }
 }

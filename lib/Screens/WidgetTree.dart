@@ -1,3 +1,4 @@
+import 'package:esantrenwali_v1/Screens/HomePage.dart';
 import 'package:flutter/material.dart';
 
 import '../Classes/CurrentUserClass.dart';
@@ -26,9 +27,34 @@ class _WidgetTreeState extends State<WidgetTree> {
             builder: (context, AsyncSnapshot<bool> snapshot) {
               //check if the snapshot contains the value true
               if (snapshot.hasData && snapshot.data == true) {
-                return Container();
+                return HomePage();
               } else {
-                return CircularProgressIndicator();
+                return Container(
+                  color: Colors.white,
+                  child: Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Container(
+                              width: 100,
+                              height: 100,
+                              child: CircularProgressIndicator()),
+                        ),
+                        SizedBox(height: 20),
+                        Center(
+                          child: Text(
+                            'Loading...',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               }
             },
           );
@@ -44,7 +70,9 @@ class _WidgetTreeState extends State<WidgetTree> {
     print("getting user detail");
     CurrentUserObject userDetail = await CurrentUserClass().getUserDetail();
     print(userDetail.role);
-    if (userDetail.role == 'Admin' || userDetail.role == 'Asrama') {
+    if (userDetail.role == 'Wali' ||
+        userDetail.role == 'Asrama' ||
+        userDetail.role == 'Admin') {
       return true;
     } else {
       return false;

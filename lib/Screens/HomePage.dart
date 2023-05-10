@@ -3,9 +3,12 @@ import 'package:esantrenwali_v1/Screens/BayarTagihan.dart';
 import 'package:esantrenwali_v1/Screens/BeritaAsrama.dart';
 import 'package:esantrenwali_v1/Screens/DonasiAplikasi.dart';
 import 'package:esantrenwali_v1/Screens/IzinPulang.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../CustomWidgets/Sidebar.dart';
+import '../Services/Authentication.dart';
+import 'WidgetTree.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home-page';
@@ -18,6 +21,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   Widget widgetBody = Container();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    returnBody();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +71,28 @@ class _HomePageState extends State<HomePage> {
         case 4:
           widgetBody = DonasiAplikasi();
           break;
-
+        case 5:
+          //sign out and go back to login page
+          _signOut();
+          break;
         default:
           widgetBody = ApaKabarAnak();
       }
     });
+  }
+
+  void _signOut() async {
+    try {
+      print('signing out');
+      await Auth().signOut();
+      // SignOut successful, navigate to the home screen
+      // Navigator.pushReplacementNamed(context, '/home');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
   }
 }

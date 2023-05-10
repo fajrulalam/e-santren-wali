@@ -34,13 +34,10 @@ class Sidebar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     //cicular avatar from image network
-                    Expanded(
-                      flex: 1,
-                      child: CircleAvatar(
-                        radius: 32,
-                        backgroundImage: NetworkImage(
-                            'https://firebasestorage.googleapis.com/v0/b/e-santren.appspot.com/o/fotoSantri%2Fplaceholder_male.jpg?alt=media&token=415504ef-1861-4dbb-b92a-be9e9e781618'),
-                      ),
+                    CircleAvatar(
+                      radius: 32,
+                      backgroundImage: NetworkImage(
+                          'https://firebasestorage.googleapis.com/v0/b/e-santren.appspot.com/o/fotoSantri%2Fplaceholder_male.jpg?alt=media&token=415504ef-1861-4dbb-b92a-be9e9e781618'),
                     ),
                     SizedBox(width: 8),
                     Expanded(

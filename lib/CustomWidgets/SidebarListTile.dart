@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../Screens/WidgetTree.dart';
+import '../Services/Authentication.dart';
+
 class SideBarListTile extends StatelessWidget {
   final int selectedIndex;
   final int tileIndex;
