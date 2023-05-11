@@ -1,6 +1,7 @@
 import 'package:esantrenwali_v1/Classes/CurrentUserClass.dart';
 import 'package:esantrenwali_v1/CustomWidgets/LoaderWidget.dart';
 import 'package:esantrenwali_v1/CustomWidgets/TambahAnakSantri.dart';
+import 'package:esantrenwali_v1/Objects/AnakSantriObject.dart';
 import 'package:esantrenwali_v1/Objects/CurrentUserObject.dart';
 import 'package:esantrenwali_v1/Screens/ApaKabarAnak.dart';
 import 'package:esantrenwali_v1/Screens/BayarTagihan.dart';
@@ -10,6 +11,7 @@ import 'package:esantrenwali_v1/Screens/IzinPulang.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../Classes/AnakSantriClass.dart';
 import '../CustomWidgets/Sidebar.dart';
 import '../Services/Authentication.dart';
 import 'WidgetTree.dart';
@@ -26,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   Widget widgetBody = Container();
   CurrentUserObject currentUserObject = CurrentUserObject(role: 'Wali');
+  AnakSantriObject anakSantriObject = AnakSantriObject();
 
   @override
   void initState() {
@@ -37,18 +40,23 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Container(
-        width: MediaQuery.of(context).size.width * 0.85,
-        child: Sidebar(
-            selectedIndex: _selectedIndex,
-            onSelected: (index) {
-              setState(() {
-                _selectedIndex = index;
-                returnBody();
-                print(index);
-              });
-            }),
-      ),
+      drawer: currentUserObject == CurrentUserObject(role: 'Wali')
+          ? Container()
+          : currentUserObject.anakSantriList?.isEmpty ?? true
+              ? Container()
+              : Container(
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  child: Sidebar(
+                      anakSantriObject: anakSantriObject,
+                      selectedIndex: _selectedIndex,
+                      onSelected: (index) {
+                        setState(() {
+                          _selectedIndex = index;
+                          returnBody();
+                          print(index);
+                        });
+                      }),
+                ),
       appBar: AppBar(
         title: const Text('Beranda'),
         centerTitle: false,
@@ -67,16 +75,23 @@ class _HomePageState extends State<HomePage> {
     if (currentUserObject.anakSantriList!.isEmpty) {
       print('building tambah santri...');
       setState(() {
-        widgetBody = TambahAnakSantri();
+        widgetBody = TambahAnakSantri(
+            currentUserObject: currentUserObject, refresh: () => returnBody());
       });
       print('built tambah anak santri');
 
       return;
     }
+
+    anakSantriObject = await AnakSantriClass.getDetailAnakSantri(
+        context, currentUserObject.anakSantriList![0]);
+
     setState(() {
       switch (_selectedIndex) {
         case 0:
-          widgetBody = ApaKabarAnak();
+          widgetBody = ApaKabarAnak(
+              anakSantriObject: anakSantriObject,
+              currentUserObject: currentUserObject);
           break;
         case 1:
           widgetBody = BeritaAsrama();
@@ -95,7 +110,9 @@ class _HomePageState extends State<HomePage> {
           _signOut();
           break;
         default:
-          widgetBody = ApaKabarAnak();
+          widgetBody = ApaKabarAnak(
+              anakSantriObject: anakSantriObject,
+              currentUserObject: currentUserObject);
       }
     });
   }

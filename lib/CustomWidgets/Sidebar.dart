@@ -1,9 +1,11 @@
+import 'package:esantrenwali_v1/Objects/AnakSantriObject.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'SidebarListTile.dart';
 
 class Sidebar extends StatelessWidget {
+  final AnakSantriObject anakSantriObject;
   final int selectedIndex;
   final Function onSelected;
 
@@ -11,6 +13,7 @@ class Sidebar extends StatelessWidget {
     required this.selectedIndex,
     required Function this.onSelected,
     Key? key,
+    required this.anakSantriObject,
   }) : super(key: key);
 
   @override
@@ -37,7 +40,8 @@ class Sidebar extends StatelessWidget {
                     CircleAvatar(
                       radius: 32,
                       backgroundImage: NetworkImage(
-                          'https://firebasestorage.googleapis.com/v0/b/e-santren.appspot.com/o/fotoSantri%2Fplaceholder_male.jpg?alt=media&token=415504ef-1861-4dbb-b92a-be9e9e781618'),
+                        anakSantriObject.pathFotoProfil!,
+                      ),
                     ),
                     SizedBox(width: 8),
                     Expanded(
@@ -48,7 +52,7 @@ class Sidebar extends StatelessWidget {
                         children: [
                           Container(
                             child: Text(
-                              'Muhammad Fajrul Alam Ulin Nuha',
+                              anakSantriObject.nama!,
                               style: GoogleFonts.balooThambi2(
                                 fontSize: 16,
                                 color: Colors.black,
@@ -58,7 +62,7 @@ class Sidebar extends StatelessWidget {
                           ),
                           Container(
                             child: Text(
-                              'DU152300001',
+                              anakSantriObject.id!,
                               textAlign: TextAlign.start,
                               style: GoogleFonts.balooThambi2(
                                 fontSize: 14,

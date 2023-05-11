@@ -16,6 +16,7 @@ class AnakSantriClass {
     if (documentSnapshot.exists) {
       Map map = documentSnapshot.data() as Map<String, dynamic>;
       anakSantriObject = AnakSantriObject(
+        id: id,
         tglLahir: map['tglLahir'],
         nama: map['nama'],
         kamar: map['kamar'],
@@ -46,5 +47,35 @@ class AnakSantriClass {
     }
 
     return anakSantriObject;
+  }
+
+  static AnakSantriObject fromMap(
+      DocumentSnapshot documentSnapshot, String id) {
+    Map map = documentSnapshot.data() as Map<String, dynamic>;
+
+    return AnakSantriObject(
+      id: id,
+      tglLahir: map['tglLahir'],
+      nama: map['nama'],
+      kamar: map['kamar'],
+      kelas: map['kelas'],
+      kelasNgaji: map['kelasNgaji'],
+      pathFotoProfil: map['pathFotoProfil'],
+      pembayaranTerakhir: map['pembayaranTerakhir'],
+      statusAktif: map['statusAktif'],
+      idWaliSantri: map['idWaliSantri'],
+      absenNgaji: map['absenNgaji'],
+      alamat: map['alamat'] ?? '',
+      jenisKelamin: map['jenisKelamin'] ?? '',
+      jenjangPendidikan: map['jenjangPendidikan'] ?? '',
+      kodeAsrama: map['kodeAsrama'] ?? '',
+      kotaAsal: map['kotaAsal'] ?? '',
+      lunasSPP: map['lunasSPP'] ?? false,
+      namaWali: map['namaWali'] ?? '',
+      noHP: map['noHP'] ?? '',
+      statusKehadiran: map['statusKehadiran'] ?? 'Tidak Ada',
+      statusKesehatan: map['statusKesehatan'] ?? {},
+      statusKepulangan: map['statusKepulangan'] ?? {},
+    );
   }
 }

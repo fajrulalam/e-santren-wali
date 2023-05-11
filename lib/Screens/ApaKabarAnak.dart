@@ -1,16 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esantrenwali_v1/Classes/AnakSantriClass.dart';
+import 'package:esantrenwali_v1/Objects/AnakSantriObject.dart';
+import 'package:esantrenwali_v1/Objects/CurrentUserObject.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class ApaKabarAnak extends StatefulWidget {
-  const ApaKabarAnak({Key? key}) : super(key: key);
+  final CurrentUserObject currentUserObject;
+  final AnakSantriObject anakSantriObject;
+  const ApaKabarAnak(
+      {Key? key,
+      required this.currentUserObject,
+      required this.anakSantriObject})
+      : super(key: key);
 
   @override
-  State<ApaKabarAnak> createState() => _ApaKabarAnakState();
+  State<ApaKabarAnak> createState() =>
+      _ApaKabarAnakState(currentUserObject, anakSantriObject);
 }
 
 class _ApaKabarAnakState extends State<ApaKabarAnak> {
+  CurrentUserObject currentUserObject;
+  AnakSantriObject anakSantriObject;
+
+  _ApaKabarAnakState(this.currentUserObject, this.anakSantriObject);
+
+  String keberadaan = '...';
+  String hariIniMengaji = '...';
+  String hafalan = '...';
+  int berapaKaliPulang = 0;
+  int sejarahSakit = 0;
+  bool sppLunas = true;
+  bool isHadir = false;
+
   bool pulangIsExpanded = false;
   bool sakitIsExpanded = false;
   bool statusSPPISExpanded = false;
@@ -20,13 +43,15 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
     'https://firebasestorage.googleapis.com/v0/b/e-santren.appspot.com/o/fotoAsrama%2FDU15_AlFalah%2F187651795_311304787296674_4376420471911140793_n.jpg?alt=media&token=d3658d7c-dbff-414c-bc1f-f71ad8c1ccec'
   ];
 
-  //Data Terakhir Pulang
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDataSteam();
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool sppLunas = true;
-    bool isHadir = false;
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
       child: SingleChildScrollView(
@@ -119,7 +144,7 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                     Image.asset('images/recite.png', width: 32),
                     const SizedBox(width: 16),
                     Text(
-                      'Hari ini mengaji',
+                      hariIniMengaji,
                       style: GoogleFonts.notoSans(
                           fontSize: 16, fontWeight: FontWeight.w500),
                     ),
@@ -527,5 +552,27 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
   static String convertDateShort(Timestamp? tanggalKembali) {
     DateTime? dateTime = tanggalKembali?.toDate();
     return DateFormat('dd/MMM/yyyy', 'id').format(dateTime!);
+  }
+
+  void getDataSteam() {
+    Stream<DocumentSnapshot> anakSantriStream = FirebaseFirestore.instance
+        .collection("SantriCollection")
+        .doc(anakSantriObject.id)
+        .snapshots();
+
+    anakSantriStream.listen((event) {
+      setState(() {
+        anakSantriObject = AnakSantriClass.fromMap(event, anakSantriObject.id!);
+
+        sppLunas = anakSantriObject.lunasSPP!;
+
+        anakSantriObject.absenNgaji == 'Hadir'
+            ? hariIniMengaji = 'Hari ini mengaji'
+            : hariIniMengaji = 'Hari ini tidak mengaji';
+
+        isHadir = anakSantriObject.statusKehadiran == 'Hadir' ||
+            anakSantriObject.statusKehadiran == 'Ada';
+      });
+    });
   }
 }

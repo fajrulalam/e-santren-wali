@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esantrenwali_v1/Classes/AnakSantriClass.dart';
+import 'package:esantrenwali_v1/Objects/CurrentUserObject.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +9,11 @@ import 'package:google_fonts/google_fonts.dart';
 import '../Objects/AnakSantriObject.dart';
 
 class TambahAnakSantri extends StatefulWidget {
-  const TambahAnakSantri({Key? key}) : super(key: key);
+  final CurrentUserObject currentUserObject;
+  final Function refresh;
+  const TambahAnakSantri(
+      {Key? key, required this.currentUserObject, required this.refresh})
+      : super(key: key);
 
   @override
   State<TambahAnakSantri> createState() => _TambahAnakSantriState();
@@ -175,7 +180,7 @@ class _TambahAnakSantriState extends State<TambahAnakSantri> {
                               Expanded(
                                 flex: 1,
                                 child: ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       String tanggalLahirLengkap =
                                           '${tglLahir.text}-${blnLahir.text}-${thnLahir.text}';
                                       //convert tanggal lahir ke format DateTime
@@ -189,6 +194,23 @@ class _TambahAnakSantriState extends State<TambahAnakSantri> {
                                         ));
                                         return;
                                       }
+
+                                      await FirebaseFirestore.instance
+                                          .collection('WaliSantriCollection')
+                                          .doc(widget.currentUserObject.uid)
+                                          .update({
+                                        'anakSantriList': FieldValue.arrayUnion(
+                                            [anakSantriObject.id!])
+                                      });
+                                      await FirebaseFirestore.instance
+                                          .collection("SantriCollection")
+                                          .doc(anakSantriObject.id)
+                                          .update({
+                                        'idWaliSantri': FieldValue.arrayUnion(
+                                            [widget.currentUserObject.uid])
+                                      });
+
+                                      widget.refresh();
                                     },
                                     child: Icon(Icons.arrow_forward_outlined)),
                               ),

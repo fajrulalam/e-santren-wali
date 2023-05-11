@@ -1,4 +1,5 @@
 class AnakSantriObject {
+  String? id;
   String? tglLahir;
   String? nama;
   String? kamar;
@@ -22,7 +23,8 @@ class AnakSantriObject {
   Map<String, dynamic>? statusKepulangan;
 
   AnakSantriObject(
-      {this.tglLahir,
+      {this.id,
+      this.tglLahir,
       this.nama,
       this.kamar,
       this.kelasNgaji,
