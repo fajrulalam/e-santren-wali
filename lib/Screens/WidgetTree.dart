@@ -1,5 +1,7 @@
 import 'package:esantrenwali_v1/Screens/HomePage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../Classes/CurrentUserClass.dart';
 import '../Objects/CurrentUserObject.dart';
@@ -15,6 +17,8 @@ class WidgetTree extends StatefulWidget {
 }
 
 class _WidgetTreeState extends State<WidgetTree> {
+  CurrentUserObject userDetail = CurrentUserObject(role: '');
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -27,34 +31,79 @@ class _WidgetTreeState extends State<WidgetTree> {
             builder: (context, AsyncSnapshot<bool> snapshot) {
               //check if the snapshot contains the value true
               if (snapshot.hasData && snapshot.data == true) {
-                return HomePage();
-              } else {
-                return Container(
-                  color: Colors.white,
-                  child: Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Container(
-                              width: 100,
-                              height: 100,
-                              child: CircularProgressIndicator()),
-                        ),
-                        SizedBox(height: 20),
-                        Center(
-                          child: Text(
-                            'Loading...',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                if (userDetail.role == 'Bukan Wali Santri') {
+                  return Scaffold(
+                      appBar: AppBar(
+                        title: Text(
+                          'E-Santren',
+                          style: GoogleFonts.notoSans(
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
+                      ),
+                      body: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Container(
+                              child: Text(
+                                'Anda tidak terdaftar sebagai Wali Santri',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 18, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 24,
+                          ),
+                          Center(
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  _signOut();
+                                },
+                                child: Text('Logout')),
+                          )
+                        ],
+                      ));
+                }
+                return HomePage();
+              } else {
+                return Scaffold(
+                    appBar: AppBar(
+                      title: Text(
+                        'E-Santren',
+                        style: GoogleFonts.notoSans(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                );
+                    body: Container(
+                      color: Colors.white,
+                      child: Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Container(
+                                  width: 100,
+                                  height: 100,
+                                  child: CircularProgressIndicator()),
+                            ),
+                            SizedBox(height: 20),
+                            Center(
+                              child: Text(
+                                'Loading...',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ));
               }
             },
           );
@@ -68,14 +117,29 @@ class _WidgetTreeState extends State<WidgetTree> {
 
   Future<bool> checkIfUserIsVerified() async {
     print("getting user detail");
-    CurrentUserObject userDetail = await CurrentUserClass().getUserDetail();
+    userDetail = await CurrentUserClass().getUserDetail();
     print(userDetail.role);
     if (userDetail.role == 'Wali' ||
         userDetail.role == 'Asrama' ||
         userDetail.role == 'Admin') {
       return true;
     } else {
-      return false;
+      return true;
+    }
+  }
+
+  void _signOut() async {
+    try {
+      print('signing out');
+      await Auth().signOut();
+      // SignOut successful, navigate to the home screen
+      // Navigator.pushReplacementNamed(context, '/home');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
     }
   }
 }

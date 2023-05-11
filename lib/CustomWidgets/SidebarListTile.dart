@@ -46,6 +46,7 @@ class SideBarListTile extends StatelessWidget {
           break;
         default:
           imageString = 'images/ic_partners.png';
+          break;
       }
       return Padding(
         padding: const EdgeInsets.only(right: 16.0),
