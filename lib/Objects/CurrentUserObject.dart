@@ -1,28 +1,14 @@
 class CurrentUserObject {
   String? uid;
   String? namaLengkap;
-  String? namaPanggilan;
-  String? honoraryName;
-  String? kodeAsrama;
-  String? jenisKelamin;
-  String? kotaAsal;
-  String? tglLahir;
-  String? role;
-  String? fotoProfil;
-  bool? mukim;
-  List<dynamic>? mengajarKelas;
+  List<String>? anakSantriList;
+  List<String>? asramaList;
+  String role;
 
   CurrentUserObject(
       {this.uid,
-        this.fotoProfil,
-        this.namaLengkap,
-        this.kodeAsrama,
-        this.honoraryName,
-        this.namaPanggilan,
-        this.jenisKelamin,
-        this.kotaAsal,
-        this.tglLahir,
-        this.mukim,
-        this.role,
-        this.mengajarKelas});
+      this.namaLengkap,
+      this.anakSantriList,
+      this.asramaList,
+      required this.role});
 }

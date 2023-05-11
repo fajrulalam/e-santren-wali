@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
@@ -14,9 +15,22 @@ class Auth {
   }
 
   Future<void> createUserWithEmailAndPssword(
-      String email, String password) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
+      String email, String password, String namaLengkap) async {
+    UserCredential userCredential = await _firebaseAuth
+        .createUserWithEmailAndPassword(email: email, password: password);
+
+    String uid = userCredential.user!.uid;
+    await FirebaseFirestore.instance
+        .collection('WaliSantriCollection')
+        .doc(uid)
+        .set({
+      'namaLengkap': namaLengkap,
+      'email': email,
+      'role': 'Wali',
+      'timestampRegistrasi': Timestamp.now(),
+      'anakSantriList': [],
+      'asramaList': []
+    });
   }
 
   Future<void> signOut() async {

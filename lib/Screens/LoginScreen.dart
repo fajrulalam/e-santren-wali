@@ -66,6 +66,14 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  bool obscureText = true;
+
+  //create namaLengkap, email, password, and konfirmasiPassword textEditController
+  TextEditingController namaLengkap = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController konfirmasiPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -81,118 +89,107 @@ class _RegisterState extends State<Register> {
                     padding: EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        Text('Register',
-                            style: GoogleFonts.balooThambi2(
-                                fontSize: 28,
-                                color: Colors.teal[700],
-                                fontWeight: FontWeight.bold)),
+                        Text(
+                          'Daftar',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
                         SizedBox(height: 20),
-                        TextField(
-                          // controller: emailController,
+                        TextFormField(
+                          controller: namaLengkap,
                           decoration: InputDecoration(
-                            //add rounded border
+                            hintText: 'Nama Lengkap',
+                            prefixIcon: Icon(Icons.person),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            labelText: 'Nomor ID anak santri',
-                            helperText: 'contoh: DU8291000001',
-                            prefixIcon: Icon(Icons.person),
                           ),
                         ),
-                        Row(
-                          children: [
-                            Spacer(),
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.teal[300]),
-                                onPressed: () {},
-                                child: Text('Cari')),
-                          ],
+                        SizedBox(height: 20),
+                        TextFormField(
+                          controller: email,
+                          decoration: InputDecoration(
+                            hintText: 'Email',
+                            prefixIcon: Icon(Icons.email),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                         ),
                         SizedBox(height: 20),
-                        Opacity(
-                          opacity: 1,
-                          child: Column(
-                            children: [
-                              Text(
-                                'Silahkan masukkan tanggal lahir sdr. [INSERT NAMA]',
-                                style: GoogleFonts.notoSans(
-                                    fontSize: 15, fontWeight: FontWeight.w600),
+                        TextFormField(
+                          controller: password,
+                          obscureText: obscureText,
+                          decoration: InputDecoration(
+                              hintText: 'Password',
+                              prefixIcon: Icon(Icons.lock),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      // controller: emailController,
-                                      decoration: InputDecoration(
-                                        //add rounded border
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        labelText: 'Tgl',
-                                        helperText: 'cth: 28',
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Expanded(
-                                    child: TextField(
-                                      // controller: emailController,
-                                      decoration: InputDecoration(
-                                        //add rounded border
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        labelText: 'Bln',
-                                        helperText: 'cth: 06',
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Expanded(
-                                    child: TextField(
-                                      // controller: emailController,
-                                      decoration: InputDecoration(
-                                        //add rounded border
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        labelText: 'Tgl',
-                                        helperText: 'cth: 2005',
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      obscureText = !obscureText;
+                                    });
+                                  },
+                                  child: obscureText
+                                      ? Icon(Icons.visibility_off_outlined)
+                                      : Icon(Icons.visibility_outlined))),
+                        ),
+                        SizedBox(height: 20),
+                        TextFormField(
+                          controller: konfirmasiPassword,
+                          obscureText: obscureText,
+                          decoration: InputDecoration(
+                              hintText: 'Konfirmasi Password',
+                              prefixIcon: Icon(Icons.lock),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              SizedBox(height: 30),
-                              Container(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 3,
-                                      child: LinearProgressIndicator(
-                                        value: 0.5,
-                                        backgroundColor: Colors.grey[300],
-                                        color: Colors.teal[400],
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Expanded(
-                                      flex: 1,
-                                      child: ElevatedButton(
-                                          onPressed: () {},
-                                          child: Icon(
-                                              Icons.arrow_forward_outlined)),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                              suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      obscureText = !obscureText;
+                                    });
+                                  },
+                                  child: obscureText
+                                      ? Icon(Icons.visibility_off_outlined)
+                                      : Icon(Icons.visibility_outlined))),
+                        ),
+                        SizedBox(height: 20),
+                        Container(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              //check if all textEditiingController are not empty
+                              if (namaLengkap.text.isEmpty ||
+                                  email.text.isEmpty ||
+                                  password.text.isEmpty ||
+                                  konfirmasiPassword.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Semua field harus diisi'),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              //check if password and konfirmasiPassword are same
+                              if (password.text != konfirmasiPassword.text) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'Password dan konfirmasi password harus sama'),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              _registerWithEmailAndPassword();
+                            },
+                            child: Text('Daftar'),
                           ),
                         ),
                       ],
@@ -225,6 +222,26 @@ class _RegisterState extends State<Register> {
           ),
         ));
   }
+
+  Future<void> _registerWithEmailAndPassword() async {
+    try {
+      await Auth().createUserWithEmailAndPssword(
+          email.text.trim(), password.text, namaLengkap.text);
+    } catch (e) {
+      //snackbar the short error message
+      String errorMessage = e.toString();
+      print(errorMessage);
+      if (errorMessage
+          .contains('The email address is already in use by another account')) {
+        errorMessage = 'Email sudah digunakan';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+        ),
+      );
+    }
+  }
 }
 
 class Login extends StatefulWidget {
@@ -249,7 +266,7 @@ class _LoginState extends State<Login> {
       await Auth().signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text);
-      Navigator.pushReplacementNamed(context, WidgetTree.id);
+      // Navigator.pushReplacementNamed(context, WidgetTree.id);
     } catch (e) {
       setState(() {
         errorIsVisible = true;

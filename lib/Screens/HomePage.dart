@@ -1,3 +1,7 @@
+import 'package:esantrenwali_v1/Classes/CurrentUserClass.dart';
+import 'package:esantrenwali_v1/CustomWidgets/LoaderWidget.dart';
+import 'package:esantrenwali_v1/CustomWidgets/TambahAnakSantri.dart';
+import 'package:esantrenwali_v1/Objects/CurrentUserObject.dart';
 import 'package:esantrenwali_v1/Screens/ApaKabarAnak.dart';
 import 'package:esantrenwali_v1/Screens/BayarTagihan.dart';
 import 'package:esantrenwali_v1/Screens/BeritaAsrama.dart';
@@ -21,6 +25,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   Widget widgetBody = Container();
+  CurrentUserObject currentUserObject = CurrentUserObject(role: 'Wali');
 
   @override
   void initState() {
@@ -53,7 +58,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void returnBody() {
+  void returnBody() async {
+    // LoaderWidget.showLoader(context);
+    print('getting user detail...');
+    currentUserObject = await CurrentUserClass().getUserDetail();
+    print('berhasil dapatin anak santri ${currentUserObject.namaLengkap}');
+    // Navigator.pop(context);
+    if (currentUserObject.anakSantriList!.isEmpty) {
+      print('building tambah santri...');
+      setState(() {
+        widgetBody = TambahAnakSantri();
+      });
+      print('built tambah anak santri');
+
+      return;
+    }
     setState(() {
       switch (_selectedIndex) {
         case 0:

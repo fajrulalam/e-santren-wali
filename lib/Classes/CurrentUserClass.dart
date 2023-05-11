@@ -13,36 +13,24 @@ class CurrentUserClass {
     late CurrentUserObject currrentUserObject;
 
     await db
-        .collection("PengurusCollection")
+        .collection("WaliSantriCollection")
         .doc(user?.uid)
         .get()
         .then((value) {
-      String namaLengkap = value.get("namaLengkap").toString();
-      String namaPanggilan = value.get("namaPanggilan").toString();
-      String honoraryName = value.get("honoraryName").toString();
-      String jenisKelamin = value.get("jenisKelamin").toString();
-      String kotaAsal = value.get("kotaAsal").toString();
-      String tglLahir = value.get("tglLahir").toString();
-      String mukim_str = value.get("mukim").toString();
-      String fotoProfil = value.get("fotoProfil").toString();
-      String role = value.get("role").toString();
-      String kodeAsrama = value.get("kodeAsrama").toString();
-      bool mukim = mukim_str == 'true';
-      List<dynamic> mengajarKelas = value.get("mengajarKelas");
+      // get the value and convert it to a map
+      Map map = value.data() as Map<String, dynamic>;
+      String namaLengkap = map['namaLengkap'].toString();
+      List<String> anakSantriList =
+          List<String>.from(map['anakSantriList'] as List);
+      List<String> asramaList = List<String>.from(map['asramaList'] as List);
+      String role = map['role'].toString();
+
       currrentUserObject = CurrentUserObject(
           uid: user?.uid,
-          honoraryName: honoraryName,
-          fotoProfil: fotoProfil,
           namaLengkap: namaLengkap,
-          namaPanggilan: namaPanggilan,
-          jenisKelamin: jenisKelamin,
-          kodeAsrama: kodeAsrama,
-          kotaAsal: kotaAsal,
-          tglLahir: tglLahir,
-          role: role,
-          mukim: mukim,
-          mengajarKelas: mengajarKelas);
-      print('Berhasil mendapatkan $namaPanggilan');
+          anakSantriList: anakSantriList,
+          asramaList: asramaList,
+          role: role);
     });
 
     return currrentUserObject;
