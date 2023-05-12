@@ -14,6 +14,12 @@ class Auth {
         email: email, password: password);
   }
 
+  Future<void> signInwWithCredential(
+      {required String providerId, required String signInMethod}) async {
+    await _firebaseAuth.signInWithCredential(
+        AuthCredential(providerId: providerId, signInMethod: signInMethod));
+  }
+
   Future<void> createUserWithEmailAndPssword(
       String email, String password, String namaLengkap) async {
     UserCredential userCredential = await _firebaseAuth

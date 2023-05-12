@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esantrenwali_v1/Screens/HomePage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../Services/Authentication.dart';
 import 'WidgetTree.dart';
@@ -73,6 +76,8 @@ class _RegisterState extends State<Register> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController konfirmasiPassword = TextEditingController();
+
+  GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
   Widget build(BuildContext context) {
@@ -196,6 +201,73 @@ class _RegisterState extends State<Register> {
                     ),
                   ),
                 ),
+                SizedBox(height: 20),
+                // SizedBox(
+                //   width: 215,
+                //   height: 50,
+                //   child: TextButton(
+                //     style: ElevatedButton.styleFrom(
+                //       primary: Colors.white,
+                //       shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(8)),
+                //       side: BorderSide(color: Colors.grey),
+                //     ),
+                //     onPressed: () {
+                //       print('google sign in');
+                //       _googleSignIn.signIn().then((value) {
+                //         value!.authentication.then((googleKey) {
+                //           FirebaseAuth.instance
+                //               .signInWithCredential(
+                //             GoogleAuthProvider.credential(
+                //               idToken: googleKey.idToken,
+                //               accessToken: googleKey.accessToken,
+                //             ),
+                //           )
+                //               .then((value) {
+                //             //check if user is already registered
+                //             FirebaseFirestore.instance
+                //                 .collection('WaliSantriCollection')
+                //                 .doc(value.user!.uid)
+                //                 .get()
+                //                 .then((snapshot) {
+                //               if (snapshot.exists) {
+                //                 //user is already registered
+                //               } else {
+                //                 //user is not registered
+                //                 //add user to firestore
+                //                 FirebaseFirestore.instance
+                //                     .collection('WaliSantriCollection')
+                //                     .doc(value.user!.uid)
+                //                     .set({
+                //                   'anakSantriList': [],
+                //                   'email': value.user!.email,
+                //                   'namaLengkap': value.user!.displayName,
+                //                   'role': 'Wali',
+                //                   'timestampRegistrasi': DateTime.now(),
+                //                 });
+                //               }
+                //             });
+                //           });
+                //         });
+                //       });
+                //     },
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Image.asset(
+                //           'images/google_logo.png',
+                //           width: 20,
+                //           height: 20,
+                //         ),
+                //         SizedBox(width: 10),
+                //         Text(
+                //           'Masuk dengan Google',
+                //           style: TextStyle(fontSize: 16, color: Colors.black),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 SizedBox(height: 20),
                 TextButton(
                   onPressed: () {

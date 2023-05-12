@@ -14,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "385003370337-fbv9o92ohjp5ig12m0g9nhh9hbpal1kt.apps.googleusercontent.com",
+          "client_id": "385003370337-olqnodfr7svge652gqfque5pvbm0qkln.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -50,7 +50,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "385003370337-fbv9o92ohjp5ig12m0g9nhh9hbpal1kt.apps.googleusercontent.com",
+          "client_id": "385003370337-olqnodfr7svge652gqfque5pvbm0qkln.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -86,7 +86,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "385003370337-fbv9o92ohjp5ig12m0g9nhh9hbpal1kt.apps.googleusercontent.com",
+          "client_id": "385003370337-1ej230kd4t14e8vhc2da9hmgrgkuqkse.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.esantrenwali_v1",
+            "certificate_hash": "dfc7023da04968259c60921fa7624855b4046282"
+          }
+        },
+        {
+          "client_id": "385003370337-olqnodfr7svge652gqfque5pvbm0qkln.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

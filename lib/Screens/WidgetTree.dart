@@ -80,6 +80,7 @@ class _WidgetTreeState extends State<WidgetTree> {
                     ),
                     body: Container(
                       color: Colors.white,
+                      height: MediaQuery.of(context).size.height,
                       child: Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
