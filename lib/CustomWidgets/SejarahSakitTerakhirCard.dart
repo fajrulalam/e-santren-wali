@@ -28,10 +28,10 @@ class SejarahSakitTerakhirCard extends StatelessWidget {
             child: Ink(
               decoration: BoxDecoration(
                   border: Border.all(
-                      color: isNotLate ? Colors.green : Colors.redAccent,
+                      color: sudahSembuh ? Colors.green : Colors.redAccent,
                       width: 2),
                   borderRadius: BorderRadius.circular(20),
-                  color: isNotLate
+                  color: sudahSembuh
                       ? Colors.green.withOpacity(0.1)
                       : Colors.redAccent.withOpacity(0.1)),
               child: InkWell(

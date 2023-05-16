@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esantrenwali_v1/Classes/AnakSantriClass.dart';
 import 'package:esantrenwali_v1/Classes/SejarahPulangClass.dart';
+import 'package:esantrenwali_v1/Objects/AbsenNgajiKelasObject.dart';
 import 'package:esantrenwali_v1/Objects/AnakSantriObject.dart';
 import 'package:esantrenwali_v1/Objects/CurrentUserObject.dart';
 import 'package:esantrenwali_v1/Objects/SejarahPulangObject.dart';
@@ -9,9 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../Classes/AbsenNgajiKelasClass.dart';
 import '../Classes/SejarahSakitClass.dart';
 import '../CustomWidgets/SejarahPulangTerakhirCard.dart';
 import '../CustomWidgets/SejarahSakitTerakhirCard.dart';
+import '../Services/CustomPageRouteAnimation.dart';
+import 'AbsenCollectionScreen.dart';
 
 class ApaKabarAnak extends StatefulWidget {
   final CurrentUserObject currentUserObject;
@@ -45,13 +49,14 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
 
   List<SejarahPulangObject> sejarahPulang = [];
   List<SejarahSakitObject> sejarahSakit = [];
+  List<AbsenNgajiKelasObject> absenKelas = [];
 
   IconData arrowIconSejarahPulang = Icons.keyboard_arrow_down;
 
   bool pulangIsExpanded = false;
   bool sakitIsExpanded = false;
   bool statusSPPISExpanded = false;
-  List<dynamic> images = [
+  List<String> images = [
     'https://firebasestorage.googleapis.com/v0/b/e-santren.appspot.com/o/fotoAsrama%2FDU15_AlFalah%2F119882119_763492927557577_1523352540989159613_n.jpg?alt=media&token=346298b2-6bb8-4022-9af4-2211283fd099',
     'https://firebasestorage.googleapis.com/v0/b/e-santren.appspot.com/o/fotoAsrama%2FDU15_AlFalah%2F336938993_651619936974045_8726345547016895210_n.jpg?alt=media&token=07db0de4-9119-4d2c-baf3-f9e819a77a5a',
     'https://firebasestorage.googleapis.com/v0/b/e-santren.appspot.com/o/fotoAsrama%2FDU15_AlFalah%2F187651795_311304787296674_4376420471911140793_n.jpg?alt=media&token=d3658d7c-dbff-414c-bc1f-f71ad8c1ccec'
@@ -212,7 +217,12 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                         Material(
                           color: Colors.white,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              print('tapped');
+                              Navigator.of(context).push(CustomPageRoute(
+                                  child: AbsenCollectionScreen(
+                                      absenNgajiKelasList: absenKelas)));
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 20),
@@ -793,28 +803,6 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
     return '${difference.inDays.toString()} hari';
   }
 
-  static String countDaysDifference(
-      Timestamp? tanggalKembali, Timestamp? rencanaTanggalKembali) {
-    DateTime? dateTime = tanggalKembali?.toDate();
-    DateTime? _rencanaTanggalKembali = rencanaTanggalKembali?.toDate();
-    Duration difference = dateTime!.difference(_rencanaTanggalKembali!);
-    int days = difference.inDays;
-    if (days == 0) {
-      return '${difference.inHours.toString()} jam';
-    }
-    return '${difference.inDays.toString()} hari';
-  }
-
-  static String convertDate(Timestamp? tanggalKembali) {
-    DateTime? dateTime = tanggalKembali?.toDate();
-    return DateFormat('EEEE, dd-MM-yyyy', 'id').format(dateTime!);
-  }
-
-  static String convertDateShort(Timestamp? tanggalKembali) {
-    DateTime? dateTime = tanggalKembali?.toDate();
-    return DateFormat('dd/MMM/yyyy', 'id').format(dateTime!);
-  }
-
   void getDataSteam() {
     Stream<DocumentSnapshot> anakSantriStream = FirebaseFirestore.instance
         .collection("SantriCollection")
@@ -848,6 +836,7 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
       setState(() {
         berapaKaliSakit = event.docs.length;
         sejarahSakit = SejarahSakitClass.getSejarahSakitSantri(event);
+        print('sejarahSakitLength ${sejarahSakit.length}');
       });
     });
 
@@ -864,6 +853,22 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
       setState(() {
         berapaKaliPulang = event.docs.length;
         sejarahPulang = SejarahPulangClass.getSejarahPulangSantri(event);
+      });
+    });
+
+    Stream<QuerySnapshot> absenNgajiSnapshot = FirebaseFirestore.instance
+        .collection("AktivitasCollection")
+        .doc(anakSantriObject.kodeAsrama)
+        .collection("AbsenNgajiLogs")
+        .where('kelasNgaji', isEqualTo: anakSantriObject.kelasNgaji)
+        .orderBy('timestamp', descending: true)
+        .snapshots();
+
+    absenNgajiSnapshot.listen((event) {
+      setState(() {
+        absenKelas =
+            AbsenNgajiKelasClass.getAbsenNgajiKelas(event, anakSantriObject);
+        images = AbsenNgajiKelasClass.getImages(absenKelas) + images;
       });
     });
   }
