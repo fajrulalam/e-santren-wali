@@ -9,6 +9,7 @@ class AnakSantriObject {
   String? pembayaranTerakhir;
   String? statusAktif;
   List<dynamic>? idWaliSantri;
+  List<dynamic>? hafalan;
   String? absenNgaji;
   String? alamat;
   String? jenisKelamin;
@@ -28,6 +29,7 @@ class AnakSantriObject {
       this.nama,
       this.kamar,
       this.kelasNgaji,
+      this.hafalan,
       this.kelas,
       this.pathFotoProfil,
       this.pembayaranTerakhir,

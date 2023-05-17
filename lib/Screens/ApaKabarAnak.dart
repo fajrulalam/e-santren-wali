@@ -6,6 +6,7 @@ import 'package:esantrenwali_v1/Objects/AnakSantriObject.dart';
 import 'package:esantrenwali_v1/Objects/CurrentUserObject.dart';
 import 'package:esantrenwali_v1/Objects/SejarahPulangObject.dart';
 import 'package:esantrenwali_v1/Objects/SejarahSakitObject.dart';
+import 'package:esantrenwali_v1/Screens/HafalanScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -258,7 +259,11 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                         Material(
                           color: Colors.white,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).push(CustomPageRoute(
+                                  child: HafalanScreen(
+                                      anakSantriObject: anakSantriObject)));
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 20),
