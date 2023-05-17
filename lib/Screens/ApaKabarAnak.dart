@@ -7,6 +7,8 @@ import 'package:esantrenwali_v1/Objects/CurrentUserObject.dart';
 import 'package:esantrenwali_v1/Objects/SejarahPulangObject.dart';
 import 'package:esantrenwali_v1/Objects/SejarahSakitObject.dart';
 import 'package:esantrenwali_v1/Screens/HafalanScreen.dart';
+import 'package:esantrenwali_v1/Screens/SejarahPulangCollection.dart';
+import 'package:esantrenwali_v1/Screens/SejarahSakitCollection.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -430,7 +432,14 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                                       children: [
                                         Spacer(),
                                         TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                                CustomPageRoute(
+                                                    child:
+                                                        SejarahPulangCollection(
+                                              sejarahPulangList: sejarahPulang,
+                                            )));
+                                          },
                                           child: Row(
                                             children: [
                                               Text(
@@ -538,7 +547,14 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                                       children: [
                                         Spacer(),
                                         TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                                CustomPageRoute(
+                                                    child:
+                                                        SejarahSakitCollection(
+                                              sejarahSakitList: sejarahSakit,
+                                            )));
+                                          },
                                           child: Row(
                                             children: [
                                               Text(

@@ -37,11 +37,7 @@ class _HafalanScreenState extends State<HafalanScreen> {
       ),
       body: progressHafalan.isEmpty
           ? Center(
-              child: Text(
-                'Belum ada data absen',
-                style: GoogleFonts.poppins(
-                    fontSize: 16, fontWeight: FontWeight.w500),
-              ),
+              child: CircularProgressIndicator(),
             )
           : Container(
               color: Colors.black54.withOpacity(0.2),
@@ -103,9 +99,9 @@ class _HafalanScreenState extends State<HafalanScreen> {
       hafalanSantri.add(element.toString());
     });
 
-    setState(() {
-      progressHafalan =
-          HafalanClass.getProgresHafalan(hafalanSantri, hafalanAsrama);
-    });
+    progressHafalan =
+        HafalanClass.getProgresHafalan(hafalanSantri, hafalanAsrama);
+
+    setState(() {});
   }
 }
