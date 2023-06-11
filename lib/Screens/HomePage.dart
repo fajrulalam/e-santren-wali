@@ -29,7 +29,8 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   Widget widgetBody = Container();
   CurrentUserObject currentUserObject = CurrentUserObject(role: 'Wali');
-  AnakSantriObject anakSantriObject = AnakSantriObject();
+  AnakSantriObject anakSantriObject =
+      AnakSantriObject(tglMasuk: Timestamp.now());
 
   @override
   void initState() {

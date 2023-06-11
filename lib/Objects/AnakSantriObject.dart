@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class AnakSantriObject {
   String? id;
+  Timestamp tglMasuk;
   String? tglLahir;
   String? nama;
   String? kamar;
@@ -25,6 +28,7 @@ class AnakSantriObject {
 
   AnakSantriObject(
       {this.id,
+      required this.tglMasuk,
       this.tglLahir,
       this.nama,
       this.kamar,

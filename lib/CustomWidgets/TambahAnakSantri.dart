@@ -20,7 +20,7 @@ class TambahAnakSantri extends StatefulWidget {
 }
 
 class _TambahAnakSantriState extends State<TambahAnakSantri> {
-  AnakSantriObject anakSantriObject = AnakSantriObject();
+  AnakSantriObject anakSantriObject = AnakSantriObject(tglMasuk: Timestamp.now());
   TextEditingController santriIDController = TextEditingController();
   TextEditingController tglLahir = TextEditingController();
   TextEditingController blnLahir = TextEditingController();

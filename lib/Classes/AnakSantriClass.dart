@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 class AnakSantriClass {
   static Future<AnakSantriObject> getDetailAnakSantri(
       BuildContext context, String id) async {
-    AnakSantriObject anakSantriObject = AnakSantriObject();
+    AnakSantriObject anakSantriObject =
+        AnakSantriObject(tglMasuk: Timestamp.now());
 
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('SantriCollection')
@@ -27,6 +28,7 @@ class AnakSantriClass {
         statusAktif: map['statusAktif'],
         idWaliSantri: map['idWaliSantri'],
         absenNgaji: map['absenNgaji'],
+        tglMasuk: map['tglMasuk'],
         alamat: map['alamat'] ?? '',
         jenisKelamin: map['jenisKelamin'] ?? '',
         jenjangPendidikan: map['jenjangPendidikan'] ?? '',
@@ -67,6 +69,7 @@ class AnakSantriClass {
       idWaliSantri: map['idWaliSantri'],
       absenNgaji: map['absenNgaji'],
       alamat: map['alamat'] ?? '',
+      tglMasuk: map['tglMasuk'],
       jenisKelamin: map['jenisKelamin'] ?? '',
       jenjangPendidikan: map['jenjangPendidikan'] ?? '',
       kodeAsrama: map['kodeAsrama'] ?? '',

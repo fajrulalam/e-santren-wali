@@ -35,6 +35,8 @@ class _SejarahPulangCollectionState extends State<SejarahPulangCollection> {
                 child: ListView.builder(
                     itemCount: widget.sejarahPulangList.length,
                     itemBuilder: (context, index) {
+                      print(
+                          'tes ${widget.sejarahPulangList[index].kembaliSesuaiRencana!}');
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: SejarahPulangTerakhirCard(

@@ -16,7 +16,9 @@ class CurrentUserClass {
         await db.collection("WaliSantriCollection").doc(user?.uid).get();
 
     if (!documentSnapshot.exists) {
-      currrentUserObject = CurrentUserObject(role: 'Bukan Wali Santri');
+      currrentUserObject = CurrentUserObject(
+        role: 'Bukan Wali Santri',
+      );
       return currrentUserObject;
     }
 

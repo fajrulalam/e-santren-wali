@@ -18,6 +18,8 @@ class SejarahPulangTerakhirCard extends StatelessWidget {
     bool isVisible = true;
 
     return StatefulBuilder(builder: (context, setState) {
+      print('${sejarahPulangTerakhir.tanggalKembali} - $isNotLate');
+
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
         child: Container(
