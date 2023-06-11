@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:esantrenwali_v1/Classes/AnakSantriClass.dart';
 import 'package:esantrenwali_v1/Classes/SejarahPulangClass.dart';
+import 'package:esantrenwali_v1/CustomWidgets/SejarahPembayaranCard.dart';
 import 'package:esantrenwali_v1/Objects/AbsenNgajiKelasObject.dart';
 import 'package:esantrenwali_v1/Objects/AnakSantriObject.dart';
 import 'package:esantrenwali_v1/Objects/AsramaObject.dart';
@@ -688,147 +689,43 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                                 ),
                                 children: [
                                   if (sejarahPembayaran.isNotEmpty)
-                                    DottedBorder(
-                                      padding: EdgeInsets.all(8),
-                                      strokeWidth: 1,
-                                      color: Colors.black.withOpacity(0.2),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                    SejarahPembayaranCard(
+                                        sejarahPembayaran:
+                                            sejarahPembayaran[0]),
+                                  if (sejarahPembayaran.isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 0.0, horizontal: 16),
+                                      child: Row(
                                         children: [
-                                          SizedBox(height: 4),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                sejarahPembayaran[0]
-                                                    .pembayaranBulan,
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: 16,
-                                                  color: Colors.black87,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                              if (sejarahPembayaran[0].lunas ==
-                                                  true)
-                                                Text('  (Lunas)',
-                                                    style: GoogleFonts.poppins(
-                                                        color: Colors.green,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.bold))
-                                              else
+                                          Spacer(),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                  CustomPageRoute(
+                                                      child:
+                                                          SejarahPulangCollection(
+                                                sejarahPulangList:
+                                                    sejarahPulang,
+                                              )));
+                                            },
+                                            child: Row(
+                                              children: [
                                                 Text(
-                                                  '  (Belum lunas)',
-                                                  style: GoogleFonts.poppins(
-                                                      color: Colors.red,
-                                                      fontSize: 14,
+                                                  'Lihat data lenkap',
+                                                  style: GoogleFonts.notoSans(
+                                                      color: Colors.blueAccent,
+                                                      fontSize: 12,
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.w600),
                                                 ),
-                                            ],
+                                                SizedBox(width: 8),
+                                                Icon(Icons.arrow_forward,
+                                                    size: 12,
+                                                    color: Colors.blueAccent),
+                                              ],
+                                            ),
                                           ),
-                                          SizedBox(height: 10),
-                                          Row(
-                                            children: [
-                                              Image.asset(
-                                                  sejarahPembayaran[0].lunas ==
-                                                          true
-                                                      ? 'images/due-date-green.png'
-                                                      : 'images/due-date.png',
-                                                  width: 16),
-                                              SizedBox(width: 8),
-                                              Text(
-                                                  sejarahPembayaran[0].lunas
-                                                      ? sejarahPembayaran[0]
-                                                          .tanggalPembayaran
-                                                          .substring(
-                                                              0,
-                                                              sejarahPembayaran[
-                                                                          0]
-                                                                      .tanggalPembayaran
-                                                                      .length -
-                                                                  10)
-                                                      : 'Silakan untuk segera membayar',
-                                                  style: GoogleFonts.poppins()),
-                                            ],
-                                          ),
-                                          if (sejarahPembayaran[0].lunas ==
-                                              true)
-                                            SizedBox(height: 20),
-                                          if (sejarahPembayaran[0].lunas ==
-                                              true)
-                                            Container(
-                                              child: TextFormField(
-                                                initialValue:
-                                                    sejarahPembayaran[0]
-                                                        .diterimaOleh,
-                                                readOnly: true,
-                                                decoration: InputDecoration(
-                                                  contentPadding:
-                                                      EdgeInsets.symmetric(
-                                                          vertical: 5,
-                                                          horizontal: 10),
-                                                  labelText: 'Diterima oleh',
-                                                  border: OutlineInputBorder(),
-                                                ),
-                                              ),
-                                            ),
-                                          SizedBox(height: 10),
-                                          if (sejarahPembayaran[0].lunas ==
-                                              true)
-                                            Opacity(
-                                              opacity: 0.8,
-                                              child: TextButton(
-                                                  onPressed: () {
-                                                    launchURL(
-                                                        sejarahPembayaran[0]
-                                                            .pdfPath);
-                                                  },
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Spacer(),
-                                                      Icon(
-                                                        Icons
-                                                            .file_open_outlined,
-                                                        color: Colors.blue,
-                                                        size: 16,
-                                                      ),
-                                                      SizedBox(width: 4),
-                                                      Text('Unduh Kwitansi',
-                                                          style: GoogleFonts
-                                                              .notoSans(
-                                                                  color: Colors
-                                                                      .blue,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600)),
-                                                    ],
-                                                  )),
-                                            ),
-                                          SizedBox(height: 10),
-                                          if (sejarahPembayaran[0].keterangan !=
-                                              null)
-                                            Container(
-                                              child: TextFormField(
-                                                initialValue:
-                                                    sejarahPembayaran[0]
-                                                        .keterangan,
-                                                readOnly: true,
-                                                decoration: InputDecoration(
-                                                  contentPadding:
-                                                      EdgeInsets.symmetric(
-                                                          vertical: 5,
-                                                          horizontal: 10),
-                                                  labelText: 'Keterangan',
-                                                  border: OutlineInputBorder(),
-                                                ),
-                                              ),
-                                            ),
                                         ],
                                       ),
                                     ),
@@ -1087,12 +984,5 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
       print('sejarahPembayaranLength ${sejarahPembayaran.length}');
       setState(() {});
     });
-  }
-
-  Future<void> launchURL(Uri _url) async {
-    print(_url);
-    if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch $_url');
-    }
   }
 }
