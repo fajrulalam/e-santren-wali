@@ -10,6 +10,7 @@ import 'package:esantrenwali_v1/Objects/CurrentUserObject.dart';
 import 'package:esantrenwali_v1/Objects/SejarahPulangObject.dart';
 import 'package:esantrenwali_v1/Objects/SejarahSakitObject.dart';
 import 'package:esantrenwali_v1/Screens/HafalanScreen.dart';
+import 'package:esantrenwali_v1/Screens/SejarahPembayaranCollection.dart';
 import 'package:esantrenwali_v1/Screens/SejarahPulangCollection.dart';
 import 'package:esantrenwali_v1/Screens/SejarahSakitCollection.dart';
 import 'package:flutter/material.dart';
@@ -704,9 +705,9 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                                               Navigator.of(context).push(
                                                   CustomPageRoute(
                                                       child:
-                                                          SejarahPulangCollection(
-                                                sejarahPulangList:
-                                                    sejarahPulang,
+                                                          SejarahPembayaranColelction(
+                                                sejarahPembayaran:
+                                                    sejarahPembayaran,
                                               )));
                                             },
                                             child: Row(
