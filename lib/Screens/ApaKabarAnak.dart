@@ -7,6 +7,7 @@ import 'package:esantrenwali_v1/Objects/AbsenNgajiKelasObject.dart';
 import 'package:esantrenwali_v1/Objects/AnakSantriObject.dart';
 import 'package:esantrenwali_v1/Objects/AsramaObject.dart';
 import 'package:esantrenwali_v1/Objects/CurrentUserObject.dart';
+import 'package:esantrenwali_v1/Objects/PenghargaanDanPelanggaranObject.dart';
 import 'package:esantrenwali_v1/Objects/SejarahPulangObject.dart';
 import 'package:esantrenwali_v1/Objects/SejarahSakitObject.dart';
 import 'package:esantrenwali_v1/Screens/HafalanScreen.dart';
@@ -19,6 +20,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Classes/AbsenNgajiKelasClass.dart';
+import '../Classes/PenghargaanDanPelanggaranClass.dart';
 import '../Classes/SejarahPembayaranClass.dart';
 import '../Classes/SejarahSakitClass.dart';
 import '../CustomWidgets/SejarahPulangTerakhirCard.dart';
@@ -26,6 +28,7 @@ import '../CustomWidgets/SejarahSakitTerakhirCard.dart';
 import '../Objects/SejarahPembayaranObject.dart';
 import '../Services/CustomPageRouteAnimation.dart';
 import 'AbsenCollectionScreen.dart';
+import 'PenghargaanDanPelanggaranScreen.dart';
 
 class ApaKabarAnak extends StatefulWidget {
   final CurrentUserObject currentUserObject;
@@ -61,6 +64,9 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
   List<SejarahPembayaranInvoiceObject> sejarahPembayaran = [];
   List<SejarahSakitObject> sejarahSakit = [];
   List<AbsenNgajiKelasObject> absenKelas = [];
+  List<PenghargaanPelanggaranObject> penghargaanPelanggaran = [];
+  List<PenghargaanPelanggaranObject> penghargaan = [];
+  List<PenghargaanPelanggaranObject> pelanggaran = [];
   // List<SejarahPembayaranInvoiceObject> dataSejarahPembayaranInvoice = [];
 
   IconData arrowIconSejarahPulang = Icons.keyboard_arrow_down;
@@ -355,9 +361,55 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                                 margin: EdgeInsets.symmetric(horizontal: 10),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(4),
-                                  child: Image.network(
-                                    images[index],
-                                    fit: BoxFit.cover,
+                                  child: InkWell(
+                                    onTap: () {
+                                      showGeneralDialog(
+                                        context: context,
+                                        barrierDismissible: true,
+                                        barrierLabel: '',
+                                        transitionDuration:
+                                            Duration(milliseconds: 200),
+                                        pageBuilder:
+                                            (context, animation1, animation2) {
+                                          return Center(
+                                            child: Stack(
+                                              children: [
+                                                InteractiveViewer(
+                                                  child: Image.network(
+                                                    images[index],
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  top: 0,
+                                                  right: 0,
+                                                  child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Colors.grey,
+                                                      shape: CircleBorder(),
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        Navigator.pop(context);
+                                                      });
+                                                    },
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Image.network(
+                                      images[index],
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               );
@@ -643,7 +695,7 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                             onTap: () {},
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 20),
+                                  vertical: 0, horizontal: 0),
                               //add border top and bottom
                               decoration: BoxDecoration(
                                 border: Border(
@@ -739,7 +791,13 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                         Material(
                           color: Colors.white,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).push(CustomPageRoute(
+                                  child: PenghargaanDanPelanggaranScreen(
+                                penghargaanAtauPelanggaran: penghargaan,
+                                isPelanggaran: false,
+                              )));
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 20),
@@ -782,7 +840,7 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                                         height: 23,
                                         child: Center(
                                           child: Text(
-                                            jumlahPenghargaan.toString(),
+                                            penghargaan.length.toString(),
                                             style: GoogleFonts.poppins(
                                                 color: Colors.white,
                                                 fontSize: 14,
@@ -800,7 +858,13 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                         Material(
                           color: Colors.white,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).push(CustomPageRoute(
+                                  child: PenghargaanDanPelanggaranScreen(
+                                penghargaanAtauPelanggaran: pelanggaran,
+                                isPelanggaran: true,
+                              )));
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 20),
@@ -837,7 +901,7 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
                                         color: Colors.redAccent,
                                         child: Center(
                                           child: Text(
-                                            JumlahPelanggaran.toString(),
+                                            pelanggaran.length.toString(),
                                             style: GoogleFonts.poppins(
                                                 color: Colors.white,
                                                 fontSize: 14,
@@ -957,6 +1021,9 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
 
     absenNgajiSnapshot.listen((event) {
       setState(() {
+        images.remove(0);
+        images.remove(1);
+        images.remove(2);
         absenKelas =
             AbsenNgajiKelasClass.getAbsenNgajiKelas(event, anakSantriObject);
         images = AbsenNgajiKelasClass.getImages(absenKelas) + images;
@@ -984,6 +1051,31 @@ class _ApaKabarAnakState extends State<ApaKabarAnak> {
 
       print('sejarahPembayaranLength ${sejarahPembayaran.length}');
       setState(() {});
+    });
+
+    Stream<QuerySnapshot> pelanggaranDanPenghargaanCollectionStream =
+        FirebaseFirestore.instance
+            .collection("SantriCollection")
+            .doc(anakSantriObject.id)
+            .collection("PelanggaranDanPenghargaan")
+            .orderBy('timestamp', descending: true)
+            .snapshots();
+
+    pelanggaranDanPenghargaanCollectionStream.listen((event) {
+      setState(() {
+        penghargaanPelanggaran = PenghargaanPelanggaranClass.getData(event);
+        print('penghargaanPelanggaranLength ${penghargaanPelanggaran.length}');
+
+        for (var i = 0; i < penghargaanPelanggaran.length; i++) {
+          if (penghargaanPelanggaran[i].isPelanggaran == true) {
+            pelanggaran.add(penghargaanPelanggaran[i]);
+          } else {
+            penghargaan.add(penghargaanPelanggaran[i]);
+          }
+
+          print('pelanggaranLength ${pelanggaran.length}');
+        }
+      });
     });
   }
 }

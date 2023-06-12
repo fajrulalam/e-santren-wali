@@ -2,44 +2,55 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esantrenwali_v1/Classes/CurrentUserClass.dart';
 import 'package:esantrenwali_v1/Objects/AnakSantriObject.dart';
 import 'package:esantrenwali_v1/Objects/CurrentUserObject.dart';
+import 'package:esantrenwali_v1/Objects/PenghargaanDanPelanggaranObject.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../Objects/AbsenNgajiKelasObject.dart';
 
-class AbsenCollectionScreen extends StatefulWidget {
+class PenghargaanDanPelanggaranScreen extends StatefulWidget {
   // final AnakSantriObject anakSantriObject;
   // final CurrentUserObject currentUserObject;
-  final List<AbsenNgajiKelasObject> absenNgajiKelasList;
-  const AbsenCollectionScreen({Key? key, required this.absenNgajiKelasList})
+  final List<PenghargaanPelanggaranObject> penghargaanAtauPelanggaran;
+  final bool isPelanggaran;
+  const PenghargaanDanPelanggaranScreen(
+      {Key? key,
+      required this.penghargaanAtauPelanggaran,
+      required this.isPelanggaran})
       : super(key: key);
 
   @override
-  State<AbsenCollectionScreen> createState() => _AbsenCollectionScreenState();
+  State<PenghargaanDanPelanggaranScreen> createState() =>
+      _AbsenCollectionScreenState();
 }
 
-class _AbsenCollectionScreenState extends State<AbsenCollectionScreen> {
+class _AbsenCollectionScreenState
+    extends State<PenghargaanDanPelanggaranScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Absen Kelas'),
+        title: Text(widget.isPelanggaran
+            ? 'Sejarah Pelanggaran'
+            : 'Koleksi Penghargaan'),
         centerTitle: false,
         iconTheme: IconThemeData(color: Colors.teal[700]),
       ),
       body: Container(
-        child: widget.absenNgajiKelasList.isEmpty
+        child: widget.penghargaanAtauPelanggaran.isEmpty
             ? Center(
                 child: Text(
-                  'Belum ada data absen',
+                  widget.isPelanggaran
+                      ? 'Belum ada data pelanggaran'
+                      : 'Belum ada data penghargaan',
                   style: GoogleFonts.poppins(
                       fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               )
             : GridView.builder(
-                itemCount: widget
-                    .absenNgajiKelasList.length, // number of items in the grid
+                itemCount: widget.penghargaanAtauPelanggaran
+                    .length, // number of items in the grid
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 4.0,
@@ -47,17 +58,18 @@ class _AbsenCollectionScreenState extends State<AbsenCollectionScreen> {
                   childAspectRatio: 9 / 12,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  if (widget.absenNgajiKelasList.isEmpty) {
+                  if (widget.penghargaanAtauPelanggaran.isEmpty) {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: Text(widget.isPelanggaran
+                          ? 'Belum ada data pelanggaran'
+                          : 'Belum ada data penghargaan'),
                     );
                   }
 
                   return Container(
                     padding: EdgeInsets.all(12),
                     child: Card(
-                      color: _getColor(widget
-                          .absenNgajiKelasList[index].kehadiranAnakSantri!),
+                      color: _getColor(widget.isPelanggaran),
                       elevation: 1,
                       //give a rounded corner
                       shape: RoundedRectangleBorder(
@@ -65,8 +77,8 @@ class _AbsenCollectionScreenState extends State<AbsenCollectionScreen> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          if (widget.absenNgajiKelasList[index].imagePath! !=
-                              'tidak ada foto') {
+                          if (widget.penghargaanAtauPelanggaran[index].file! !=
+                              '') {
                             showGeneralDialog(
                               context: context,
                               barrierDismissible: true,
@@ -78,8 +90,9 @@ class _AbsenCollectionScreenState extends State<AbsenCollectionScreen> {
                                     children: [
                                       InteractiveViewer(
                                         child: Image.network(
-                                          widget.absenNgajiKelasList[index]
-                                              .imagePath!,
+                                          widget
+                                              .penghargaanAtauPelanggaran[index]
+                                              .file!,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -120,8 +133,8 @@ class _AbsenCollectionScreenState extends State<AbsenCollectionScreen> {
                               ),
                               Center(
                                 child: Text(
-                                  widget.absenNgajiKelasList[index]
-                                      .kehadiranAnakSantri!,
+                                  widget.penghargaanAtauPelanggaran[index]
+                                      .namaPenghargaanAtauPelanggaran!,
                                   style: GoogleFonts.poppins(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -129,9 +142,9 @@ class _AbsenCollectionScreenState extends State<AbsenCollectionScreen> {
                                 ),
                               ),
                               Spacer(),
-                              if (widget
-                                      .absenNgajiKelasList[index].imagePath! !=
-                                  'tidak ada foto')
+                              if (widget.penghargaanAtauPelanggaran[index]
+                                      .file! !=
+                                  '')
                                 Container(
                                   margin: EdgeInsets.symmetric(horizontal: 2),
                                   child: Container(
@@ -145,8 +158,10 @@ class _AbsenCollectionScreenState extends State<AbsenCollectionScreen> {
                                         child: Image(
                                           fit: BoxFit.cover,
                                           image: NetworkImage(
-                                            widget.absenNgajiKelasList[index]
-                                                .imagePath!,
+                                            widget
+                                                .penghargaanAtauPelanggaran[
+                                                    index]
+                                                .file!,
                                           ),
                                         ),
                                       ),
@@ -195,7 +210,8 @@ class _AbsenCollectionScreenState extends State<AbsenCollectionScreen> {
                                 children: [
                                   Text(
                                     dateFormat(widget
-                                        .absenNgajiKelasList[index].timestamp!),
+                                        .penghargaanAtauPelanggaran[index]
+                                        .timestamp!),
                                     style: GoogleFonts.poppins(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400,
@@ -211,8 +227,8 @@ class _AbsenCollectionScreenState extends State<AbsenCollectionScreen> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      widget
-                                          .absenNgajiKelasList[index].pengabsen!
+                                      widget.penghargaanAtauPelanggaran[index]
+                                          .dicatatOleh!
                                           .replaceAll("Ustadz", "Ust")
                                           .replaceAll("Ustadzah", "Ustz"),
                                       maxLines: 1,
@@ -236,19 +252,13 @@ class _AbsenCollectionScreenState extends State<AbsenCollectionScreen> {
     );
   }
 
-  Color _getColor(String kehadiran) {
+  Color _getColor(bool kehadiran) {
     //use switch to check for different cases. if Hadir green, if Alfa red, if sakit or izin yellow
-    switch (kehadiran) {
-      case 'Hadir':
-        return Colors.green[100]!;
-      case 'Alfa':
-        return Colors.red[100]!;
-      case 'Sakit':
-        return Colors.yellow[100]!;
-      case 'Izin':
-        return Colors.yellow[100]!;
-      default:
-        return Colors.white;
+
+    if (kehadiran) {
+      return Colors.green[100]!;
+    } else {
+      return Colors.red[100]!;
     }
   }
 

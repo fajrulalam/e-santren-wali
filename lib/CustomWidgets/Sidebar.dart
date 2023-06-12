@@ -99,11 +99,15 @@ class Sidebar extends StatelessWidget {
               title: 'Bayar Tagihan',
               selectedIndex: selectedIndex,
               onSelected: onSelected),
-          SideBarListTile(
-              tileIndex: 4,
-              title: 'Donasi untuk Aplikasi',
-              selectedIndex: selectedIndex,
-              onSelected: onSelected),
+          Visibility(
+            visible: false,
+            child: SideBarListTile(
+                tileIndex: 4,
+                title: 'Donasi untuk Aplikasi',
+                selectedIndex: selectedIndex,
+                onSelected: onSelected),
+          ),
+
           SideBarListTile(
               tileIndex: 5,
               title: 'Logout',
